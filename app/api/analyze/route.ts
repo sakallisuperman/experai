@@ -8,14 +8,15 @@ export async function POST(req: NextRequest) {
     const { arac, piyasa, mod, kullanici, parcalar } = await req.json()
 
     const parcaBilgi = parcalar && parcalar.length > 0
-      ? `Boyalı/değişen parçalar: ${parcalar.map((p: any) => `${p.isim} (${p.tip})`).join(', ')}`
+      ? `Boyalı/değişen parçalar: ${parcalar.map((p: {isim: string, tip: string}) => `${p.isim} (${p.tip})`).join(', ')}`
       : 'Boyasız, hasarsız'
 
-    const modAciklama = {
+    const modMap: Record<string, string> = {
       'flip': 'Hızlı al-sat (flip) modu — kısa sürede kâr hedefi',
       'beklet': 'Beklet/yatırım modu — uzun vadeli değer artışı',
       'fiyat': 'Sadece fiyat öğrenme modu',
-    }[mod] || 'Genel analiz'
+    }
+    const modAciklama = modMap[mod as string] || 'Genel analiz'
 
     const kullaniciTip = kullanici === 'galeri'
       ? 'Galerici/trader (komisyon, vergi ve stok maliyeti hesaba katılmalı)'
@@ -33,9 +34,9 @@ ARAÇ BİLGİLERİ:
 - Hasar durumu: ${parcaBilgi}
 
 PİYASA VERİLERİ (${piyasa.adet} ilan analiz edildi):
-- Ortalama fiyat: ${piyasa.ortalama.toLocaleString('tr-TR')} TL
-- Min: ${piyasa.min.toLocaleString('tr-TR')} TL
-- Max: ${piyasa.max.toLocaleString('tr-TR')} TL
+- Ortalama fiyat: ${piyasa.ortalama?.toLocaleString('tr-TR')} TL
+- Min: ${piyasa.min?.toLocaleString('tr-TR')} TL
+- Max: ${piyasa.max?.toLocaleString('tr-TR')} TL
 
 KULLANICI PROFİLİ: ${kullaniciTip}
 AMAÇ: ${modAciklama}
@@ -55,10 +56,10 @@ Aşağıdaki formatta JSON olarak yanıt ver, başka hiçbir şey yazma:
   "risk_items": ["madde1", "madde2", "madde3"],
   "kronik_sorunlar": "bu model ve km için bilinen sorunlar ve tahmini masraf",
   "pazarlik_nazik": "nazik pazarlık cümlesi",
-  "pazarlik_dengeli": "dengeli pazarlık cümlesi", 
+  "pazarlik_dengeli": "dengeli pazarlık cümlesi",
   "pazarlik_sert": "sert pazarlık cümlesi",
   "ai_yorum": "2-3 cümle genel değerlendirme",
-  "fiyat_etkisi": sayı (hasar/boya nedeniyle düşen TL değeri, negatif olabilir)
+  "fiyat_etkisi": sayı (hasar/boya nedeniyle düşen TL değeri)
 }`
 
     const completion = await groq.chat.completions.create({

@@ -14,10 +14,10 @@ export default function ResultCard({ analiz, piyasa, ilanlar, arac, onGeri }: Pr
   const [pazTon, setPazTon] = useState<'nazik'|'dengeli'|'sert'>('nazik')
   const [copied, setCopied] = useState(false)
 
-  const kararRenk = { AL:'#5DCAA5', DIKKATLI_OL:'#EF9F27', KACIN:'#E24B4A' }[analiz.karar] || '#EF9F27'
-  const kararIcon = { AL:'✓', DIKKATLI_OL:'!', KACIN:'✕' }[analiz.karar] || '!'
-  const kararBg = { AL:'rgba(93,202,165,.08)', DIKKATLI_OL:'rgba(239,159,39,.08)', KACIN:'rgba(226,75,74,.08)' }[analiz.karar]
-  const kararBorder = { AL:'rgba(93,202,165,.25)', DIKKATLI_OL:'rgba(239,159,39,.25)', KACIN:'rgba(226,75,74,.2)' }[analiz.karar]
+  const kararRenk = ({'AL':'#5DCAA5','DIKKATLI_OL':'#EF9F27','KACIN':'#E24B4A'} as Record<string,string>)[analiz.karar] || '#EF9F27'
+  const kararIcon = ({'AL':'✓','DIKKATLI_OL':'!','KACIN':'✕'} as Record<string,string>)[analiz.karar] || '!'
+  const kararBg = ({'AL':'rgba(93,202,165,.08)','DIKKATLI_OL':'rgba(239,159,39,.08)','KACIN':'rgba(226,75,74,.08)'} as Record<string,string>)[analiz.karar]
+  const kararBorder = ({'AL':'rgba(93,202,165,.25)','DIKKATLI_OL':'rgba(239,159,39,.25)','KACIN':'rgba(226,75,74,.2)'} as Record<string,string>)[analiz.karar]
 
   const fmt = (n: number) => n?.toLocaleString('tr-TR') + ' TL'
   const pazMetin = { nazik: analiz.pazarlik_nazik, dengeli: analiz.pazarlik_dengeli, sert: analiz.pazarlik_sert }

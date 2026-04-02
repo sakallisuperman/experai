@@ -1,23 +1,15 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { CAR_DATA, MARKALAR, MOTOR_HACIMLERI, MOTOR_GUCLERI, YILLAR, RENKLER, KASA_TIPLERI } from '@/lib/carData'
+import CarMap from '@/components/CarMap'
 
 const PARCA_ISIMLERI: Record<string, string> = {
-  'kaput': 'Motor Kaputu',
-  'on-tampon': 'Ön Tampon',
-  'arka-tampon': 'Arka Tampon',
-  'bagaj': 'Bagaj Kapağı',
-  'tavan': 'Tavan',
-  'sol-on-kapi': 'Sol Ön Kapı',
-  'sol-arka-kapi': 'Sol Arka Kapı',
-  'sag-on-kapi': 'Sağ Ön Kapı',
-  'sag-arka-kapi': 'Sağ Arka Kapı',
-  'sol-on-camurluk': 'Sol Ön Çamurluk',
-  'sag-on-camurluk': 'Sağ Ön Çamurluk',
-  'sol-arka-camurluk': 'Sol Arka Çamurluk',
-  'sag-arka-camurluk': 'Sağ Arka Çamurluk',
-  'on-sol-kapi-sov': 'Ön Sol Kapı Söve',
-  'on-sag-kapi-sov': 'Ön Sağ Kapı Söve',
+  'kaput': 'Motor Kaputu', 'on-tampon': 'Ön Tampon',
+  'arka-tampon': 'Arka Tampon', 'bagaj': 'Bagaj Kapağı',
+  'tavan': 'Tavan', 'sol-on-kapi': 'Sol Ön Kapı',
+  'sol-arka-kapi': 'Sol Arka Kapı', 'sag-on-kapi': 'Sağ Ön Kapı',
+  'sag-arka-kapi': 'Sağ Arka Kapı', 'sol-on-camurluk': 'Sol Ön Çamurluk',
+  'sag-on-camurluk': 'Sağ Ön Çamurluk', 'sol-arka-camurluk': 'Sol Arka Çamurluk',
 }
 
 type ParcaTip = 'lb' | 'b' | 'deg'
@@ -38,19 +30,11 @@ export default function InputForm({ onAnaliz, loading }: Props) {
   const [linkOk, setLinkOk] = useState(false)
   const [modeller, setModeller] = useState<string[]>([])
   const [form, setForm] = useState({
-    marka: 'Toyota',
-    model: 'Corolla',
-    yil: '2019',
-    km: '85000',
-    yakit: 'Benzin',
-    vites: 'Otomatik',
-    motor_hacmi: '1.6',
-    motor_gucu: '132',
-    kasa: 'Sedan',
-    renk: 'Beyaz',
-    ilan_fiyati: '',
-    garanti: 'Garanti yok',
-    hasar: '0',
+    marka: 'Toyota', model: 'Corolla', yil: '2019',
+    km: '85000', yakit: 'Benzin', vites: 'Otomatik',
+    motor_hacmi: '1.6', motor_gucu: '132',
+    kasa: 'Sedan', renk: 'Beyaz',
+    ilan_fiyati: '', garanti: 'Garanti yok', hasar: '0',
   })
 
   useEffect(() => {
@@ -76,18 +60,6 @@ export default function InputForm({ onAnaliz, loading }: Props) {
     })
   }
 
-  const parcaRenk = (id: string) => {
-    const t = secilenParcalar[id]
-    if (!t) return '#2a2a26'
-    return { lb: '#E8892A', b: '#378ADD', deg: '#E24B4A' }[t]
-  }
-
-  const parcaStroke = (id: string) => {
-    const t = secilenParcalar[id]
-    if (!t) return 'rgba(255,255,255,0.12)'
-    return { lb: '#c06818', b: '#1a5fa0', deg: '#b02020' }[t]
-  }
-
   const fiyatEtkisi = Object.values(secilenParcalar)
     .reduce((s, t) => s + ({ lb: 15000, b: 35000, deg: 55000 }[t] || 0), 0)
 
@@ -102,33 +74,15 @@ export default function InputForm({ onAnaliz, loading }: Props) {
         km: parseInt(form.km.replace(/\./g, '')),
         ilan_fiyati: parseInt(form.ilan_fiyati.replace(/\./g, '').replace(/,/g, '')) || 0
       },
-      mod,
-      kullanici,
-      parcalar: parcaList
+      mod, kullanici, parcalar: parcaList
     })
   }
 
   const ic = "w-full text-sm px-3 py-[7px] rounded-lg border border-white/10 bg-[#1f1f1c] text-[#f0ede4] outline-none focus:border-amber-600/40 transition-colors"
   const lc = "text-[10px] text-[#5a5854] uppercase tracking-wider mb-1 block"
 
-  const PARCALAR_SVG = [
-    { id: 'kaput', label: 'Kaput', x: 18, y: 72, w: 58, h: 46 },
-    { id: 'on-tampon', label: 'Ön T.', x: 18, y: 118, w: 58, h: 16 },
-    { id: 'sol-on-camurluk', label: '', x: 18, y: 72, w: 16, h: 46 },
-    { id: 'sol-on-kapi', label: 'Sol Ön', x: 96, y: 76, w: 44, h: 54 },
-    { id: 'sol-arka-kapi', label: 'Sol Arka', x: 142, y: 76, w: 44, h: 54 },
-    { id: 'sol-arka-camurluk', label: '', x: 188, y: 76, w: 16, h: 54 },
-    { id: 'tavan', label: 'Tavan', x: 96, y: 36, w: 108, h: 38 },
-    { id: 'bagaj', label: 'Bagaj', x: 224, y: 72, w: 58, h: 46 },
-    { id: 'arka-tampon', label: 'Arka T.', x: 224, y: 118, w: 58, h: 16 },
-    { id: 'sag-on-camurluk', label: '', x: 266, y: 72, w: 16, h: 46 },
-    { id: 'sag-on-kapi', label: 'Sağ Ön', x: 162, y: 76, w: 44, h: 54 },
-    { id: 'sag-arka-kapi', label: 'Sağ Arka', x: 118, y: 76, w: 42, h: 54 },
-  ]
-
   return (
     <div className="max-w-md mx-auto bg-[#161614] rounded-2xl border border-white/10 overflow-hidden pb-5">
-
       <div className="flex justify-between items-center px-5 pt-4 pb-3">
         <div className="text-[17px] font-medium tracking-tight text-[#f0ede4]">
           Eksper<sup className="text-[9px] text-amber-400 tracking-wider font-normal">AI</sup>
@@ -144,13 +98,13 @@ export default function InputForm({ onAnaliz, loading }: Props) {
       </div>
 
       <div className="mx-5 mb-3 bg-[#1f1f1c] border border-white/10 rounded-xl p-3">
-        <div className="text-[10px] text-[#5a5854] uppercase tracking-wider mb-2">İlan linki yapıştır — otomatik doldurur</div>
+        <div className="text-[10px] text-[#5a5854] uppercase tracking-wider mb-2">İlan linki yapıştır</div>
         <div className="flex gap-2">
           <input value={link} onChange={e => setLink(e.target.value)}
             placeholder="sahibinden.com/ilan/..."
             className={ic + " flex-1"} />
           <button onClick={() => link && setLinkOk(true)}
-            className="px-3 py-1.5 rounded-lg bg-amber-400/10 text-amber-400 border border-amber-700/60 text-xs font-medium whitespace-nowrap transition-all hover:bg-amber-400/15">
+            className="px-3 py-1.5 rounded-lg bg-amber-400/10 text-amber-400 border border-amber-700/60 text-xs font-medium whitespace-nowrap">
             Çek
           </button>
         </div>
@@ -240,8 +194,8 @@ export default function InputForm({ onAnaliz, loading }: Props) {
       <div className="mx-5 mb-3">
         <div className="text-[10px] text-[#5a5854] uppercase tracking-wider mb-2 pb-1.5 border-b border-white/7">Hasar & boya durumu</div>
         <div className="flex gap-2 mb-3">
-          {[['boya','Boyalı / değişen parça'],['hasar','Hasar kaydı']] .map(([t,l]) => (
-            <button key={t} onClick={() => setHasarTab(t as 'boya' | 'hasar')}
+          {([['boya','Boyalı / değişen parça'],['hasar','Hasar kaydı']] as const).map(([t,l]) => (
+            <button key={t} onClick={() => setHasarTab(t)}
               className={`flex-1 py-1.5 rounded-lg border text-xs font-medium transition-all ${hasarTab === t ? 'bg-[#1f1f1c] border-white/14 text-[#f0ede4]' : 'border-white/7 text-[#9c9a8e]'}`}>
               {l}
             </button>
@@ -263,59 +217,19 @@ export default function InputForm({ onAnaliz, loading }: Props) {
             </div>
 
             <div className="bg-[#1f1f1c] border border-white/7 rounded-xl p-3 mb-2">
-              <div className="flex gap-3 mb-2 flex-wrap">
-                {[['#2a2a26','Orijinal','rgba(255,255,255,0.12)'],['#E8892A','Lokal boyalı','#c06818'],['#378ADD','Boyalı','#1a5fa0'],['#E24B4A','Değişen','#b02020']].map(([c,l]) => (
+              <div className="flex gap-3 mb-3 flex-wrap">
+                {([['#2a2a26','Orijinal'],['#E8892A','Lokal boyalı'],['#378ADD','Boyalı'],['#E24B4A','Değişen']] as const).map(([c,l]) => (
                   <div key={l} className="flex items-center gap-1.5 text-[10px] text-[#9c9a8e]">
-                    <div className="w-2.5 h-2.5 rounded-sm border" style={{ background: c, borderColor: 'rgba(255,255,255,0.15)' }} />
+                    <div className="w-2.5 h-2.5 rounded-sm border border-white/15" style={{ background: c }} />
                     {l}
                   </div>
                 ))}
               </div>
-
-              <svg viewBox="0 0 300 155" className="w-full select-none">
-                <g>
-                  <rect x="76" y="134" width="46" height="10" rx="5" fill="#111" stroke="#333" strokeWidth="0.5"/>
-                  <rect x="178" y="134" width="46" height="10" rx="5" fill="#111" stroke="#333" strokeWidth="0.5"/>
-                  <ellipse cx="99" cy="139" rx="13" ry="7" fill="#1a1a18" stroke="#3a3a36" strokeWidth="0.8"/>
-                  <ellipse cx="201" cy="139" rx="13" ry="7" fill="#1a1a18" stroke="#3a3a36" strokeWidth="0.8"/>
-                  <ellipse cx="99" cy="139" rx="7" ry="4" fill="#242422" stroke="#444" strokeWidth="0.5"/>
-                  <ellipse cx="201" cy="139" rx="7" ry="4" fill="#242422" stroke="#444" strokeWidth="0.5"/>
-                </g>
-                <path d="M60 118 L60 75 Q62 60 75 55 L100 42 Q115 28 150 26 Q185 28 200 42 L225 55 Q238 60 240 75 L240 118 Q238 124 230 126 L70 126 Q62 124 60 118Z"
-                  fill="#222220" stroke="#3a3a36" strokeWidth="0.8"/>
-                <path d="M105 28 L110 50 L190 50 L195 28" fill="#1a2535" stroke="#2a3545" strokeWidth="0.5"/>
-                <path d="M110 50 L105 70 L195 70 L190 50Z" fill="#1a2535" stroke="#2a3545" strokeWidth="0.4"/>
-                <line x1="150" y1="50" x2="150" y2="70" stroke="#2a3545" strokeWidth="0.5"/>
-
-                {[
-                  ['kaput', 60, 75, 38, 43, 3, 'Kaput'],
-                  ['on-tampon', 62, 118, 34, 10, 2, 'Ön T.'],
-                  ['sol-on-camurluk', 60, 75, 14, 43, 2, ''],
-                  ['tavan', 105, 26, 90, 44, 3, 'Tavan'],
-                  ['sol-on-kapi', 98, 72, 44, 54, 2, 'Sol Ön'],
-                  ['sol-arka-kapi', 144, 72, 44, 54, 2, 'Sol Arka'],
-                  ['bagaj', 202, 75, 38, 43, 3, 'Bagaj'],
-                  ['arka-tampon', 204, 118, 34, 10, 2, 'Arka T.'],
-                  ['sag-on-camurluk', 226, 75, 14, 43, 2, ''],
-                  ['sag-on-kapi', 158, 72, 44, 54, 2, 'Sağ Ön'],
-                  ['sag-arka-kapi', 112, 72, 44, 54, 2, 'Sağ Arka'],
-                ].map(([id, x, y, w, h, rx, label]: any) => (
-                  <g key={id} onClick={() => toggleParca(id)} style={{ cursor: 'pointer' }}>
-                    <rect x={x} y={y} width={w} height={h} rx={rx}
-                      fill={parcaRenk(id)} stroke={parcaStroke(id)} strokeWidth="0.6" opacity="0.92"/>
-                    {label && (
-                      <text x={x + w / 2} y={y + h / 2 + 3} textAnchor="middle"
-                        fill="rgba(255,255,255,0.45)" fontSize="6" style={{ pointerEvents: 'none', userSelect: 'none' }}>
-                        {label}
-                      </text>
-                    )}
-                  </g>
-                ))}
-
-                <text x="150" y="150" textAnchor="middle" fill="#3a3a36" fontSize="7">
-                  parçaya tıkla → seç
-                </text>
-              </svg>
+              <CarMap
+                secilenParcalar={secilenParcalar}
+                onToggle={toggleParca}
+                paintMode={paintMode}
+              />
             </div>
 
             {Object.keys(secilenParcalar).length > 0 && (
@@ -323,11 +237,11 @@ export default function InputForm({ onAnaliz, loading }: Props) {
                 {Object.entries(secilenParcalar).map(([id, tip]) => (
                   <div key={id} className="flex justify-between items-center px-3 py-1.5 rounded-lg text-xs"
                     style={{
-                      background: { lb: 'rgba(232,137,42,.08)', b: 'rgba(55,138,221,.08)', deg: 'rgba(226,75,74,.08)' }[tip],
-                      color: { lb: '#E8892A', b: '#378ADD', deg: '#E24B4A' }[tip]
+                      background: ({ lb:'rgba(232,137,42,.08)', b:'rgba(55,138,221,.08)', deg:'rgba(226,75,74,.08)' } as Record<string,string>)[tip],
+                      color: ({ lb:'#E8892A', b:'#378ADD', deg:'#E24B4A' } as Record<string,string>)[tip]
                     }}>
                     <span>{PARCA_ISIMLERI[id]}</span>
-                    <span className="opacity-60 text-[10px]">{{ lb: 'Lokal boyalı', b: 'Boyalı', deg: 'Değişen parça' }[tip]}</span>
+                    <span className="opacity-60 text-[10px]">{{ lb:'Lokal boyalı', b:'Boyalı', deg:'Değişen parça' }[tip]}</span>
                     <button onClick={() => setSecilenParcalar(p => { const n = { ...p }; delete n[id]; return n })}
                       className="opacity-50 ml-2 text-sm leading-none">×</button>
                   </div>
@@ -336,7 +250,7 @@ export default function InputForm({ onAnaliz, loading }: Props) {
             )}
 
             {fiyatEtkisi > 0 && (
-              <div className="px-3 py-2 bg-red-500/8 border border-red-500/20 rounded-lg flex justify-between items-center text-xs">
+              <div className="px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg flex justify-between items-center text-xs">
                 <span className="text-[#9c9a8e]">Tahmini fiyat etkisi</span>
                 <span className="text-red-400 font-medium">-{fiyatEtkisi.toLocaleString('tr-TR')} TL</span>
               </div>

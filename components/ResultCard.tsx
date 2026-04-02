@@ -106,11 +106,7 @@ export default function ResultCard({ analiz, piyasa, ilanlar, arac, onGeri }: Pr
             </div>
           )}
 
-          <div className="mx-5 flex gap-1.5 flex-wrap">
-            {['sahibinden','otoendeks','arabam.com'].map(s => (
-              <span key={s} className="text-[10px] px-2 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">{s}</span>
-            ))}
-          </div>
+          
         </div>
       )}
 
